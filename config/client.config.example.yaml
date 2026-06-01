@@ -1,0 +1,80 @@
+# [CLIENT-SPECIFIC] Copy this to client.config.yaml and customize
+
+app:
+  name: "My Chatbot"
+  description: "Custom chatbot for my business"
+  version: "1.0.0"
+
+messaging:
+  gupshup_source: "${GUPSHUP_SOURCE}"
+  gupshup_app_name: "${GUPSHUP_APP_NAME}"
+  gupshup_api_key: "${GUPSHUP_API_KEY}"
+
+prompts:
+  system: |
+    You are a helpful customer service assistant.
+    Respond to user queries about products and orders.
+    Be friendly and professional.
+
+  # [CLIENT-SPECIFIC] Customize for your intent classification
+  intent_classification: |
+    Classify the user message into one of these intents:
+    - product_search: User is looking for products
+    - order_status: User wants to track their order
+    - complaint: User has a complaint or issue
+    - other: Anything else
+
+# [CLIENT-SPECIFIC] Define tools your bot can use
+tools:
+  - name: "search_products"
+    description: "Search for products in inventory"
+    parameters:
+      type: "object"
+      properties:
+        query:
+          type: "string"
+          description: "What the user is looking for"
+      required: ["query"]
+  
+  - name: "get_order_status"
+    description: "Check status of an order"
+    parameters:
+      type: "object"
+      properties:
+        order_id:
+          type: "string"
+          description: "Order ID to check"
+      required: ["order_id"]
+
+# [CLIENT-SPECIFIC] Response templates
+responses:
+  media_not_supported: |
+    I can't process images or videos yet. 
+    Please describe what you need in text.
+  
+  fallback_error: |
+    Sorry, I encountered an error. Please try again later.
+
+# [CLIENT-SPECIFIC] External APIs your business uses
+external_apis:
+  product_search:
+    endpoint: "${PRODUCT_API_URL}"
+    api_key: "${PRODUCT_API_KEY}"
+    enabled: true
+  
+  order_tracking:
+    endpoint: "${ORDER_API_URL}"
+    api_key: "${ORDER_API_KEY}"
+    enabled: true
+
+# [CLIENT-SPECIFIC] Flow configurations
+flows:
+  product_search:
+    enabled: true
+    api_endpoint: "${PRODUCT_API_URL}"
+    api_key: "${PRODUCT_API_KEY}"
+  
+  order_tracking:
+    enabled: true
+    api_endpoint: "${ORDER_API_URL}"
+    api_key: "${ORDER_API_KEY}"
